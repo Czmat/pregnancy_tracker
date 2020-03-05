@@ -1,0 +1,83 @@
+body {
+  font-family: verdana;
+  margin: 0;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: white;
+}
+
+body {
+  background-color: rgb(197, 199, 201);
+}
+
+.header-container {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(61, 112, 221);
+  color: white;
+  height: 15vh;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.forms,
+.lists {
+  display: flex;
+}
+
+.forms > *,
+.lists > * {
+  border: solid 1px black;
+  flex: 1;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+/* h2 {
+  text-transform: uppercase;
+}
+
+li {
+}
+
+li > * {
+  margin: 1rem;
+} */
+
+/* h1 {
+  background-color: teal;
+  padding: 1rem;
+  color: linen;
+  text-align: center;
+} */
+/* select,
+input,
+button {
+  height: 3rem;
+  font-size: 1.5rem;
+} */
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form > * {
+  margin: 5px;
+}
+
+section {
+}
