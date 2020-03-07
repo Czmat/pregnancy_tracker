@@ -20,7 +20,7 @@ const WeightForm = ({ createUserWeight }) => {
     createUserWeight(weight);
   };
 
-  console.log(currentDate);
+  //console.log(currentDate, weight.weighInDate);
   return (
     <section>
       <h2>Weight Goals</h2>
@@ -54,7 +54,7 @@ const WeightForm = ({ createUserWeight }) => {
             <input
               name="weighInDate"
               type="date"
-              defaultValue={currentDate}
+              //defaultValue={currentDate}
               value={weight.weighInDate}
               onChange={handleChange}
             />

@@ -15,25 +15,38 @@ export default function Nav({ users, createUser, params }) {
           <a href="#">About</a>
         </li>
         <li>
-          <a href="#">Weight</a>
+          <a
+            href={`#${qs.stringify({ view: 'weight' })}`}
+            className={params.view === 'weight' ? 'selected' : ''}
+          >
+            Weight
+          </a>
         </li>
         <li>
-          <a href="#">Water</a>
+          <a
+            href={`#${qs.stringify({ view: 'water' })}`}
+            className={params.view === 'water' ? 'selected' : ''}
+          >
+            Water
+          </a>
         </li>
         <li>
-          <a href="#">Vitamins</a>
+          <a
+            href={`#${qs.stringify({ view: 'vitamin' })}`}
+            className={params.view === 'vitamin' ? 'selected' : ''}
+          >
+            Vitamins
+          </a>
         </li>
         <li>
-          <a href="#">Activity</a>
+          <a
+            href={`#${qs.stringify({ view: 'activity' })}`}
+            className={params.view === 'activity' ? 'selected' : ''}
+          >
+            Activity
+          </a>
         </li>
       </ul>
-
-      {/* <a
-        href={`#${qs.stringify({ view: 'home' })}`}
-        className={params.view === 'home' ? 'selected' : ''}
-      >
-        <img src={user.avatar} />
-      </a> */}
     </div>
   );
 }

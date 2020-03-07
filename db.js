@@ -62,6 +62,11 @@ const createUser = async user => {
   return (await client.query(SQL, [user.firstName, user.lastName])).rows[0];
 };
 
+const deleteUser = async id => {
+  const SQL = 'DELETE FROM users WHERE id=$1';
+  await client.query(SQL, [id]);
+};
+
 const readWeights = async () => {
   return (await client.query('SELECT * from weights')).rows;
 };
@@ -77,10 +82,17 @@ const createWeight = async (
   ).rows[0];
 };
 
+const deleteWeight = async id => {
+  const SQL = 'DELETE FROM weights WHERE id=$1';
+  await client.query(SQL, [id]);
+};
+
 module.exports = {
   sync,
   readUsers,
   createUser,
   readWeights,
   createWeight,
+  deleteUser,
+  deleteWeight,
 };

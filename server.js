@@ -43,6 +43,21 @@ app.post('/api/:id/weights', (req, res, next) => {
     .catch(next);
 });
 
+//deletes
+app.delete('/api/users/:id', (req, res, next) => {
+  const id = req.params.id;
+  db.deleteUser(id)
+    .then(response => res.send(response))
+    .catch(next);
+});
+
+app.delete('/api/weights/:id', (req, res, next) => {
+  const id = req.params.id;
+  db.deleteWeight(id)
+    .then(response => res.send(response))
+    .catch(next);
+});
+
 const port = process.env.PORT || 3000;
 
 db.sync()
