@@ -1,27 +1,36 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 
-const UserWeightList = ({ loggedInUser, userWeights }) => {
-  const currentDate = moment().format('YYYY-MM-DD');
-
+const UserWeightList = ({ loggedInUser, userWeights, destroyUserWeight }) => {
   return (
     <div className="weight-list">
       {
-        <ul>
+        <div>
           {userWeights
             .filter(w => w.userId === loggedInUser.id)
             .map(weight => {
-              //console.log(weight);
+              const currentDate = moment(weight.weighInDate).format(
+                'DD-MM-YYYY'
+              );
+              console.log(weight);
               return (
-                <li key={weight.id}>
-                  start: {weight.startWeight}
-                  goal:{weight.goalWeight}
-                  Date: {weight.weighInDate}
-                  weight: {weight.weight}
-                </li>
+                <div key={weight.id} className="card">
+                  <h3>Weigh-in on {currentDate}</h3>
+                  <p>start: {weight.startWeight}</p>
+                  <p>goal:{weight.goalWeight}</p>
+                  <p>weight: {weight.weight}</p>
+                  <div>
+                    <button
+                      className="button"
+                      onClick={() => destroyUserWeight(weight)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
               );
             })}
-        </ul>
+        </div>
       }
     </div>
   );

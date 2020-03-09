@@ -9,6 +9,7 @@ const sync = async () => {
   const SQL = `
   CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
   DROP TABLE IF EXISTS weights;
+  DROP TABLE IF EXISTS vitamins;
   DROP TABLE IF EXISTS users;
   CREATE TABLE users(
     id UUID PRIMARY KEY default uuid_generate_v4(),
@@ -25,6 +26,12 @@ const sync = async () => {
     "goalWeight" INTEGER NOT NULL,
     "userId" UUID REFERENCES users(id)
   );
+  CREATE TABLE vitamins(
+    id UUID PRIMARY KEY default uuid_generate_v4(),
+    "isTakenDate" DATE NOT NULL default CURRENT_DATE,
+    "isTaken" BOOLEAN default false,
+    "userId" UUID REFERENCES users(id)
+    );
     INSERT INTO users("firstName", "lastName") values('lucy', 'goosy');
     INSERT INTO users("firstName", "lastName") values('moe', 'shmow');
   `;
@@ -87,6 +94,22 @@ const deleteWeight = async id => {
   await client.query(SQL, [id]);
 };
 
+const readVitamins = async () => {
+  return (await client.query('SELECT * from vitamins')).rows;
+};
+
+const createVitamin = async ({ isTakenDate, isTaken, userId }, id) => {
+  const SQL =
+    'INSERT INTO vitamins("isTakenDate", "isTaken", "userId") values($1, $2, $3) returning *';
+  return (await client.query(SQL, [isTakenDate, isTaken, id])).rows[0];
+};
+
+const updateVitamin = async department => {
+  const SQL = 'UPDATE departments set name=$1 WHERE id=$2 returning *';
+  const response = await client.query(SQL, [department.name, department.id]);
+  return response.rows[0];
+};
+
 module.exports = {
   sync,
   readUsers,
@@ -95,4 +118,7 @@ module.exports = {
   createWeight,
   deleteUser,
   deleteWeight,
+  readVitamins,
+  createVitamin,
+  updateVitamin,
 };

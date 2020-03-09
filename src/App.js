@@ -4,6 +4,7 @@ import axios from 'axios';
 import { getHash } from './utils/Utils';
 import UserForm from './components/UserForm';
 import UserHomePage from './components/UserHomePage';
+import UserGreeting from './components/UserGreeting';
 import WeightForm from './components/WeightForm';
 import Nav from './components/Nav';
 import Header from './components/Header';
@@ -15,6 +16,7 @@ const App = () => {
   const [users, setUsers] = useState([]);
   const [userWeights, setUserWeights] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeUserId, setActiveUserId] = useState('');
   const [params, setParams] = useState(qs.parse(getHash()));
 
   useEffect(() => {
@@ -28,9 +30,7 @@ const App = () => {
   const createUser = async user => {
     try {
       const created = (await axios.post('/api/users', user)).data;
-      //console.log(created);
       setUsers([...users, created]);
-
       setLoggedInUser(created);
       setError('');
     } catch (ex) {
@@ -40,7 +40,6 @@ const App = () => {
 
   const createUserWeight = async weight => {
     try {
-      //console.log(weight);
       const created = (
         await axios.post(`/api/${loggedInUser.id}/weights`, weight)
       ).data;
@@ -51,30 +50,34 @@ const App = () => {
     }
   };
 
-  // //delete
-  // const destroyUser = async userToDestroy => {
-  //   try {
-  //     await axios.delete(`/api/users/${userToDestroy.id}`);
-  //     //setUserBooks({});
-  //     setUsers(users.filter(user => user.id !== userToDestroy.id));
+  //delete
+  const destroyUser = async userToDestroy => {
+    console.log(userToDestroy);
+    try {
+      await axios.delete(`/api/users/${userToDestroy.id}`);
+      setUsers(users.filter(user => user.id !== userToDestroy.id));
+      setError('');
+    } catch (ex) {
+      setError(ex.response.data.message);
+      console.log(ex.response.data.message, 'error log');
+    }
+  };
 
-  //     setError('');
-  //   } catch (ex) {
-  //     setError(ex.response.data.message);
-  //   }
-  // };
+  const destroyUserWeight = async weightToDestroy => {
+    try {
+      await axios.delete(`/api/weights/${weightToDestroy.id}`);
+      setUserWeights(
+        userWeights.filter(weight => {
+          console.log(weightToDestroy.id);
+          weight.id !== weightToDestroy.id;
+        })
+      );
 
-  // const destroyUserWeight = async weightToDestroy => {
-  //   try {
-  //     await axios.delete(`/api/weights/${weightToDestroy.id}`);
-  //     // setAuthorBooks({});
-  //     setUserWeights(books.filter(weight => weight.id !== weightToDestroy.id));
-
-  //     setError('');
-  //   } catch (ex) {
-  //     setError(ex.response.data.message);
-  //   }
-  // };
+      setError('');
+    } catch (ex) {
+      setError(ex.response.data.message);
+    }
+  };
 
   useEffect(() => {
     axios.get('/api/users').then(response => setUsers(response.data));
@@ -92,16 +95,30 @@ const App = () => {
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
         params={params}
-        //setActiveUserId={setActiveUserId}
+        setActiveUserId={setActiveUserId}
+        activeUserId={activeUserId}
       />
       <Nav users={users} createUser={createUser} params={params} />
-      {!!error && <div className="error">{error}</div>}
+      {/* {!!error && <div className="error">{error}</div>} */}
       {//params.view === 'logged-in'
       isLoggedIn && (
+        <UserGreeting
+          loggedInUser={loggedInUser}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          destroyUser={destroyUser}
+          setActiveUserId={setActiveUserId}
+          activeUserId={activeUserId}
+        />
+      )}
+
+      {params.view === 'logged-in' && (
         <UserHomePage
           loggedInUser={loggedInUser}
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
+          userWeights={userWeights}
+          params={params}
         />
       )}
 
@@ -118,6 +135,7 @@ const App = () => {
           loggedInUser={loggedInUser}
           userWeights={userWeights}
           params={params}
+          destroyUserWeight={destroyUserWeight}
         />
       )}
     </div>

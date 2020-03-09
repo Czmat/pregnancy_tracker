@@ -7,8 +7,10 @@ export default function Header({
   params,
   isLoggedIn,
   setIsLoggedIn,
+  activeUserId,
+  setActiveUserId,
 }) {
-  const [activeUserId, setActiveUserId] = useState('');
+  //const [activeUserId, setActiveUserId] = useState('');
   //const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const loginBtn = ev => {
@@ -29,9 +31,9 @@ export default function Header({
 
   return (
     <div className="header-container">
-      <h1>Pregnancy Tracker</h1>
+      <h1>Healthy and Fit Bump</h1>
 
-      <div>
+      <div className="header-login">
         <label>User List </label>
         {/* <form onSubmit={loginLogoutBtn}> */}
         <select
@@ -39,7 +41,9 @@ export default function Header({
             setActiveUserId(e.target.value);
           }}
         >
-          <option defaultValue>Select User</option>
+          <option defaultValue value="">
+            Select User
+          </option>
           {users.map(user => {
             return (
               <option key={user.id} value={user.id}>
@@ -50,18 +54,22 @@ export default function Header({
         </select>
         {isLoggedIn ? (
           <button
+            className="button"
             onClick={e => {
               logoutBtn(e);
               setIsLoggedIn(false);
               setActiveUserId('');
+              window.location = `#${qs.stringify({ view: 'signin' })}`;
             }}
           >
             Logout
           </button>
         ) : (
           <button
+            className="button"
             disabled={!activeUserId}
             onClick={e => {
+              window.location = `#${qs.stringify({ view: 'logged-in' })}`;
               loginBtn(e);
               setIsLoggedIn(true);
             }}
@@ -69,7 +77,37 @@ export default function Header({
             Login
           </button>
         )}
+      </div>
+      <div className="header-login">
+        <label>New User </label>
+        <button
+          disabled={isLoggedIn}
+          className="button"
+          onClick={e => {
+            logoutBtn(e);
+            setIsLoggedIn(false);
+            setActiveUserId('');
+            window.location = `#${qs.stringify({ view: 'signin' })}`;
+          }}
+        >
+          Sign up
+        </button>
         {/* <a
+            href={`#${qs.stringify({ view: 'signin' })}`}
+            className={params.view === 'signin' ? 'selected' : ''}
+            onClick={e => {
+              logoutBtn(e);
+              setIsLoggedIn(false);
+              setActiveUserId('');
+            }}
+          >
+            Signin
+          </a> */}
+      </div>
+    </div>
+  );
+  {
+    /* <a
           href={`#${qs.stringify({ view: 'logged-in' })}`}
           className={params.view === 'logged-in' ? 'selected button' : 'button'}
           onClick={e => {
@@ -90,17 +128,9 @@ export default function Header({
           }}
         >
           Login
-        </a> */}
-        {/* </form> */}
-        <div>
-          <a
-            href={`#${qs.stringify({ view: 'signin' })}`}
-            className={params.view === 'signin' ? 'selected' : ''}
-          >
-            Signin
-          </a>
-        </div>
-      </div>
-    </div>
-  );
+        </a> */
+  }
+  {
+    /* </form> */
+  }
 }
